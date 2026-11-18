@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memoria Viva | Caso 10</title>
+<style>
+:root{--navy:#142b46;--blue:#2563eb;--cyan:#0e7490;--ink:#172334;--muted:#64748b;--bg:#f3f6fa;--line:#dce4ee;--white:#fff;--green:#15803d;--red:#b91c1c;--amber:#a16207}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Inter,system-ui,Segoe UI,Arial,sans-serif}
+header{background:linear-gradient(115deg,#102a43,#174b72);color:white;padding:26px max(22px,calc((100% - 1180px)/2))}
+header .tag{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;opacity:.8}header h1{font-size:clamp(25px,4vw,36px);margin:7px 0 4px}header p{margin:0;color:#d7e7f5}
+main{max-width:1180px;margin:22px auto;padding:0 18px 40px}.topline{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pill{font-size:12px;border:1px solid var(--line);background:white;border-radius:20px;padding:6px 10px;color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}button{border:0;border-radius:9px;padding:10px 14px;font-weight:650;cursor:pointer;background:var(--blue);color:white}button.secondary{background:white;color:var(--navy);border:1px solid var(--line)}button:hover{filter:brightness(.96)}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.tabs button{background:#e6edf5;color:#334155}.tabs button.active{background:var(--navy);color:white}
+.panel{display:none}.panel.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.two{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;margin-top:14px}
+.card{background:white;border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 2px 7px #102a4308;min-width:0}
+.kpi small{display:block;color:var(--muted);font-size:12px}.kpi strong{display:block;font-size:28px;margin:4px 0;color:var(--navy)}
+h2{font-size:19px;margin:0 0 12px;color:var(--navy)}h3{font-size:15px;margin:0 0 10px;color:var(--navy)}
+label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px}input,select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;background:white;color:var(--ink);font:inherit}
+.formgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.note{font-size:12px;color:var(--muted);margin-top:8px}
+.status{border-radius:8px;padding:10px 12px;margin:8px 0;font-size:13px;background:#eff6ff;border-left:4px solid var(--blue)}.status.good{background:#f0fdf4;border-color:var(--green)}.status.bad{background:#fef2f2;border-color:var(--red)}.status.warn{background:#fffbeb;border-color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}th{background:#f5f8fc;color:#475569;font-size:11px;text-transform:uppercase;letter-spacing:.3px}td:first-child,th:first-child{text-align:left}
+.chart{width:100%;height:260px;display:block}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.barrow{display:grid;grid-template-columns:100px 1fr 55px;gap:8px;align-items:center;font-size:12px;margin:10px 0}.bar{height:11px;background:#edf2f7;border-radius:20px;overflow:hidden}.bar span{height:100%;display:block;background:#2782bd;border-radius:20px}
+.small{font-size:12px;color:var(--muted)}.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.flow div{background:#f7fafc;border:1px solid var(--line);border-radius:10px;padding:13px}.flow b{color:var(--navy)}
+footer{font-size:11px;color:var(--muted);padding:20px 2px}
+@media(max-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}.formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:1fr}}
+@media print{body{background:white}header{padding:18px 24px}.actions,.tabs{display:none!important}main{max-width:none;margin:0;padding:12px}.panel{display:block!important;break-inside:avoid}.card{box-shadow:none;break-inside:avoid}.topline{display:none}button{display:none}}
+</style>
+</head>
+<body>
+<header><div class="tag">Ingeniería industrial · análisis de procesos</div><h1>Memoria Viva</h1><p>Herramienta de decisión y capacidad · Caso 10: familias de digitalización</p></header>
+<main>
+<div class="topline"><span class="pill">Modelo académico · datos sintéticos del caso</span><div class="actions"><button class="secondary" onclick="downloadCSV()">Exportar a Excel (CSV)</button><button class="secondary" onclick="window.print()">Generar PDF / Imprimir</button><button onclick="resetAll()">Restablecer datos</button></div></div>
+<div class="tabs">
+<button class="active" data-panel="decision">Panel de decisión</button><button data-panel="mix">Análisis de mezcla</button><button data-panel="tests">Pruebas públicas</button><button data-panel="sample">Muestreo</button><button data-panel="ergo">Ergonomía</button><button data-panel="flow">Proceso</button>
+</div>
+<section id="decision" class="panel active">
+<div class="grid">
+<div class="card kpi"><small>Demanda por jornada</small><strong id="kDemand">600</strong><small>documentos</small></div>
+<div class="card kpi"><small>Tiempo neto</small><strong id="kTime">390</strong><small>minutos por recurso</small></div>
+<div class="card kpi"><small>Mezcla del paquete</small><strong id="kMix">3A / 2B</strong><small>5 documentos</small></div>
+<div class="card kpi"><small>Capacidad calculada</small><strong id="kCapacity">640</strong><small>documentos por jornada</small></div>
+</div>
+<div class="two">
+<div class="card">
+<h2>Parámetros del escenario</h2>
+<div class="formgrid">
+<div><label>Demanda (documentos)</label><input id="demand" type="number" min="1" value="600"></div>
+<div><label>Minutos netos</label><input id="minutes" type="number" min="1" value="390"></div>
+<div><label>Documentos B por paquete</label><select id="bcount"><option value="0">0 B / 5 A</option><option value="1">1 B / 4 A</option><option value="2" selected>2 B / 3 A</option><option value="3">3 B / 2 A</option><option value="4">4 B / 1 A</option><option value="5">5 B / 0 A</option></select></div>
+<div><label>Presupuesto (UM)</label><input id="budget" type="number" min="0" value="180"></div>
+<div><label>Método</label><select id="method"><option>Base</option><option>A</option><option>B</option><option selected>C</option></select></div>
+</div>
+<p class="note">Los tiempos de preparación y revisión ya incluyen traslados y alimentación manual. El escáner es automático y no requiere atención durante el ciclo.</p>
+<div id="decisionStatus"></div>
+</div>
+<div class="card">
+<h2>Carga por paquete</h2><div id="loadBars"></div>
+<div class="status" id="bottleneck"></div>
+<h3>Capacidad por recurso</h3><div id="capacityRows"></div>
+</div>
+</div>
+<div class="two">
+<div class="card"><h2>Comparación de métodos</h2><div style="overflow:auto"><table id="methodTable"></table></div><p class="note">La capacidad se calcula como el mínimo de paquetes enteros que puede procesar cada recurso en el tiempo neto disponible.</p></div>
+<div class="card"><h2>Utilización de recursos</h2><canvas id="utilChart" class="chart" width="600" height="260"></canvas><div class="legend"><span><i class="dot" style="background:#2782bd"></i>Preparación</span><span><i class="dot" style="background:#0e7490"></i>Escáner</span><span><i class="dot" style="background:#d97706"></i>Revisión</span></div></div>
+</div>
+</section>
+<section id="mix" class="panel">
+<div class="card"><h2>Comparación de mezcla por método</h2><p class="small">Se compara la mezcla base 3A/2B y la sensibilidad 2A/3B. Demanda de referencia: 600 documentos, 390 minutos y paquete de cinco documentos.</p><div style="overflow:auto"><table id="mixTable"></table></div></div>
+<div class="card" style="margin-top:14px"><h2>Interpretación</h2><div id="mixInsight" class="status"></div></div>
+</section>
+<section id="tests" class="panel">
+<div class="card"><h2>Pruebas públicas de la página 53</h2><p class="small">Se conservan las entradas especificadas: Base, C y A obligatorias; B como extensión opcional.</p><div style="overflow:auto"><table id="testTable"></table></div><div id="testNotes"></div></div>
+</section>
+<section id="sample" class="panel">
+<div class="two">
+<div class="card"><h2>Muestreo de estados del escáner</h2><p class="small">Conteos observados en otra jornada (página 54).</p><div class="formgrid">
+<div><label>En ciclo</label><input id="cycle" type="number" min="0" value="126"></div><div><label>Espera preparación</label><input id="waitPrep" type="number" min="0" value="36"></div><div><label>Espera espacio revisión</label><input id="waitReview" type="number" min="0" value="18"></div><div><label>Margen absoluto</label><input id="margin" type="number" min=".001" max=".5" step=".01" value=".05"></div></div><div id="sampleResults"></div></div>
+<div class="card"><h2>Distribución observada</h2><canvas id="sampleChart" class="chart" width="600" height="260"></canvas><p class="note">La espera del escáner no significa automáticamente que las dos personas estén desocupadas. Registrar en paralelo buffers y actividades permite distinguir falta de trabajo y bloqueo.</p></div>
+</div>
+</section>
+<section id="ergo" class="panel">
+<div class="two">
+<div class="card"><h2>Datos antropométricos</h2><table><thead><tr><th>Dimensión</th><th>P5</th><th>P50</th><th>P95</th></tr></thead><tbody><tr><td>Altura codo sentado (mm)</td><td>650</td><td>710</td><td>780</td></tr><tr><td>Alcance cómodo frontal (mm)</td><td>300</td><td>360</td><td>420</td></tr><tr><td>Superficie sugerida (20 mm bajo codo)</td><td>630</td><td>690</td><td>760</td></tr></tbody></table><p class="note">El caso propone regular la superficie 20 mm por debajo del codo sentado y ubicar materiales frecuentes dentro del alcance P5.</p></div>
+<div class="card"><h2>Momento externo de una carpeta</h2><div class="formgrid"><div><label>Masa (kg)</label><input id="mass" type="number" value="1" min="0" step=".1"></div><div><label>Gravedad (m/s²)</label><input id="gravity" type="number" value="9.81" min="0" step=".01"></div><div><label>Alcance extendido (m)</label><input id="far" type="number" value=".50" min="0" step=".05"></div><div><label>Alcance cercano (m)</label><input id="near" type="number" value=".25" min="0" step=".05"></div></div><div id="momentResults"></div></div>
+</div>
+</section>
+<section id="flow" class="panel">
+<div class="card"><h2>Flujo del proceso</h2><div class="flow">
+<div><b>1 · Preparación</b><p>Recibir e identificar familia; llevar a mesa; ordenar hojas; preparar guía especial solo para B; comprobar orden y alimentar bandeja; entregar al escáner.</p><small>Distancia A: 7 m · B: 7 m</small></div>
+<div><b>2 · Escaneo automático</b><p>Ejecutar escaneo según familia. El escáner no requiere atención durante el ciclo.</p><small>Distancia A: 0 m · B: 0 m</small></div>
+<div><b>3 · Revisión</b><p>Trasladar y revisar integridad; para B llevar a bandeja especial y volver; registrar y almacenar reproducción.</p><small>Distancia A: 3 m · B: 9 m</small></div>
+</div><div class="status" style="margin-top:14px">Recorrido total: Familia A = 10 m por documento; Familia B = 16 m por documento.</div><p class="note">La suma de tiempos de recursos en serie representa el recorrido de un documento o paquete. No equivale al intervalo de salida en régimen estable: los recursos trabajan en paralelo y la salida la determina el cuello de botella. La capacidad calculada es de régimen estable, no una promesa desde una línea vacía.</p></div>
+</section>
+<footer>Memoria Viva · Caso académico de digitalización. Las cifras se calculan con los datos proporcionados en las páginas 51–54. UM = unidades monetarias. Verificar los resultados antes de utilizarlos como compromiso operativo.</footer>
+</main>
+<script>
+const DATA={
+Base:{pa:20,pb:40,sa:30,sb:60,ra:15,rb:30,cost:0},
+A:{pa:18,pb:30,sa:30,sb:60,ra:15,rb:30,cost:80},
+B:{pa:20,pb:40,sa:24,sb:42,ra:15,rb:30,cost:220},
+C:{pa:16,pb:32,sa:26,sb:52,ra:12,rb:22,cost:140}
+};
+const $=id=>document.getElementById(id),fmt=n=>Number(n).toLocaleString('es-MX',{maximumFractionDigits:2});
+function calc(method,b,mins,demand){const m=DATA[method],a=5-b,loads={prep:a*m.pa+b*m.pb,scan:a*m.sa+b*m.sb,review:a*m.ra+b*m.rb},caps=Object.values(loads).map(x=>Math.floor(mins*60/x)),names=['Preparación','Escáner','Revisión'],min=Math.min(...caps),idx=caps.indexOf(min),packages=Math.ceil(demand/5);return {loads,caps,names,cap:min,docs:min*5,bottleneck:names[idx],packages,util:Object.values(loads).map(x=>x*packages/(mins*60)*100)}}
+function render(){
+ const d=Math.max(1,+$('demand').value||600),mins=Math.max(1,+$('minutes').value||390),b=+$('bcount').value,budget=Math.max(0,+$('budget').value||0),method=$('method').value,r=calc(method,b,mins,d);
+ $('kDemand').textContent=fmt(d);$('kTime').textContent=fmt(mins);$('kMix').textContent=(5-b)+'A / '+b+'B';$('kCapacity').textContent=fmt(r.docs);
+ $('loadBars').innerHTML=r.names.map((n,i)=>`<div class="barrow"><b>${n}</b><div><div class="bar"><span style="width:${Math.min(100,r.util[i])}%"></span></div><small>${fmt(r.loads[Object.keys(r.loads)[i]])} s/paquete · ${fmt(r.util[i])}% utilización</small></div><b>${fmt(r.caps[i])}</b></div>`).join('');
+ $('bottleneck').innerHTML=`Cuello de botella: <b>${r.bottleneck}</b>. Capacidad limitada por ${fmt(r.cap)} paquetes completos.`;
+ $('capacityRows').innerHTML=r.names.map((n,i)=>`<div class="barrow"><span>${n}</span><span>${fmt(r.caps[i])} paquetes</span><b>${fmt(r.caps[i]*5)} doc.</b></div>`).join('');
+ const demandOk=r.docs>=d,budgetOk=DATA[method].cost<=budget;
+ $('decisionStatus').innerHTML=`<div class="status ${demandOk?'good':'bad'}">Demanda: ${demandOk?'CUMPLE':'NO CUMPLE'} · ${fmt(r.docs)} documentos de capacidad frente a ${fmt(d)} solicitados.</div><div class="status ${budgetOk?'good':'bad'}">Presupuesto: ${budgetOk?'CUMPLE':'NO CUMPLE'} · Costo del método ${method}: ${DATA[method].cost} UM; disponible: ${fmt(budget)} UM.</div>`;
+ let rows=['Base','A','B','C'].map(k=>{let q=calc(k,b,mins,d);return `<tr><td>${k}</td><td>${fmt(q.loads.prep*r.packages/60)}</td><td>${fmt(q.loads.scan*r.packages/60)}</td><td>${fmt(q.loads.review*r.packages/60)}</td><td>${q.bottleneck}</td><td>${q.docs}</td><td>${DATA[k].cost}</td></tr>`}).join('');
+ $('methodTable').innerHTML='<thead><tr><th>Método</th><th>Prep. min</th><th>Escáner min</th><th>Revisión min</th><th>Cuello</th><th>Cap. doc.</th><th>Costo UM</th></tr></thead><tbody>'+rows+'</tbody>';
+ drawBars($('utilChart'),r.util,r.names);
+}
+function drawBars(canvas,values,names){let c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);let colors=['#2782bd','#0e7490','#d97706'];c.font='18px Arial';values.forEach((v,i)=>{let y=35+i*72;c.fillStyle='#334155';c.fillText(names[i],18,y);c.fillStyle='#e8eef5';c.fillRect(150,y-17,390,23);c.fillStyle=colors[i];c.fillRect(150,y-17,390*Math.min(1,v/100),23);c.fillStyle='#172334';c.fillText(v.toFixed(1)+'%',550,y);});c.fillStyle='#64748b';c.font='13px Arial';c.fillText('Porcentaje de ocupación para la demanda seleccionada',18,245)}
+function mix(){
+ let html='<thead><tr><th>Método</th><th>Mezcla</th><th>Prep. min</th><th>Escáner min</th><th>Revisión min</th><th>Cuello</th><th>Cap. docs</th><th>Cumple 600</th></tr></thead><tbody>';
+ ['Base','A','C'].forEach(k=>[2,3].forEach(b=>{let q=calc(k,b,390,600),packs=120;html+=`<tr><td>${k}</td><td>${5-b}A/${b}B</td><td>${fmt(q.loads.prep*packs/60)}</td><td>${fmt(q.loads.scan*packs/60)}</td><td>${fmt(q.loads.review*packs/60)}</td><td>${q.bottleneck}</td><td>${q.docs}</td><td>${q.docs>=600?'Sí':'No'}</td></tr>`}));
+ $('mixTable').innerHTML=html+'</tbody>';
+ let c2=calc('C',3,390,600);$('mixInsight').textContent=`Con el método C, al pasar de 3A/2B a 2A/3B, la carga de escáner aumenta de 364 a 416 minutos para 120 paquetes. La capacidad baja de ${calc('C',2,390,600).docs} a ${c2.docs} documentos. En la mezcla 2A/3B, el escáner continúa como cuello de botella y no se alcanzan los 600 documentos.`;
+}
+function tests(){
+ let cases=[['1 · Obligatoria','Base',600,0],['2 · Obligatoria','C',600,180],['3 · Obligatoria','A',600,180],['4 · Opcional','B',660,250]];
+ $('testTable').innerHTML='<thead><tr><th>Prueba</th><th>Método</th><th>Demanda</th><th>Presupuesto</th><th>Cargas P/E/R (min)</th><th>Cap. paquetes</th><th>Cap. docs</th><th>Cuello</th><th>Demanda</th><th>Presupuesto</th></tr></thead><tbody>'+cases.map(([label,k,d,bud])=>{let q=calc(k,2,390,d),p=q.packages;return `<tr><td>${label}</td><td>${k}</td><td>${d}</td><td>${bud}</td><td>${fmt(q.loads.prep*p/60)} / ${fmt(q.loads.scan*p/60)} / ${fmt(q.loads.review*p/60)}</td><td>${q.cap}</td><td>${q.docs}</td><td>${q.bottleneck}</td><td>${q.docs>=d?'Cumple':'No cumple'}</td><td>${DATA[k].cost<=bud?'Cumple':'No cumple'}</td></tr>`}).join('')+'</tbody>';
+ $('testNotes').innerHTML='<div class="status warn">Nota de validación: para Base y A, el escáner requiere 420 min para 120 paquetes; para C requiere 364 min. C es la alternativa que satisface simultáneamente la demanda de 600 documentos y el presupuesto de 180 UM en la mezcla 3A/2B. B tiene capacidad suficiente, pero cuesta 220 UM y excede 180 UM; en la prueba opcional cuenta con 250 UM.</div>';
+}
+function sample(){
+ let c=+$('cycle').value||0,p=+$('waitPrep').value||0,v=+$('waitReview').value||0,e=+$('margin').value||.05,n=c+p+v;
+ if(!n){$('sampleResults').textContent='Ingresa conteos mayores que cero.';return}
+ let ph=c/n,z=1.96,err=z*Math.sqrt(ph*(1-ph)/n),lo=Math.max(0,ph-err),hi=Math.min(1,ph+err),req=Math.ceil(z*z*ph*(1-ph)/(e*e));
+ $('sampleResults').innerHTML=`<div class="status">Total: <b>${n}</b> observaciones · Proporción en ciclo: <b>${(ph*100).toFixed(1)}%</b>.</div><div class="status">IC aproximado del 95%: <b>${(lo*100).toFixed(1)}% – ${(hi*100).toFixed(1)}%</b>.</div><div class="status">Tamaño total requerido: <b>${req}</b> observaciones · Adicionales: <b>${Math.max(0,req-n)}</b>.</div>`;
+ let cv=$('sampleChart'),ctx=cv.getContext('2d'),vals=[c,p,v],labs=['En ciclo','Espera preparación','Espera revisión'],cols=['#2782bd','#0e7490','#d97706'];ctx.clearRect(0,0,600,260);vals.forEach((x,i)=>{let y=38+i*70;ctx.fillStyle='#334155';ctx.font='17px Arial';ctx.fillText(labs[i],18,y);ctx.fillStyle='#e8eef5';ctx.fillRect(210,y-18,310,24);ctx.fillStyle=cols[i];ctx.fillRect(210,y-18,310*x/n,24);ctx.fillStyle='#172334';ctx.fillText(x+' ('+(x/n*100).toFixed(1)+'%)',530,y);});
+}
+function ergo(){let m=+$('mass').value||0,g=+$('gravity').value||9.81,f=+$('far').value||0,n=+$('near').value||0,a=m*g*f,b=m*g*n;$('momentResults').innerHTML=`<div class="status">Momento extendido: <b>${fmt(a)} Nm</b> · Momento cercano: <b>${fmt(b)} Nm</b>.</div><div class="status">Reducción del momento al acercar la carpeta: <b>${a?fmt((a-b)/a*100):0}%</b>.</div>`}
+function downloadCSV(){let d=+$('demand').value||600,mins=+$('minutes').value||390,b=+$('bcount').value,method=$('method').value,budget=+$('budget').value||0;let lines=[['Memoria Viva - Caso 10'],['Demanda',d],['Minutos netos',mins],['Mezcla A',5-b],['Mezcla B',b],['Método seleccionado',method],['Presupuesto UM',budget],[],['Método','Preparación min','Escáner min','Revisión min','Cuello','Capacidad paquetes','Capacidad documentos','Costo UM']];['Base','A','B','C'].forEach(k=>{let q=calc(k,b,mins,d),p=q.packages;lines.push([k,q.loads.prep*p/60,q.loads.scan*p/60,q.loads.review*p/60,q.bottleneck,q.cap,q.docs,DATA[k].cost])});lines.push([],['Muestreo'],['Estado','Conteo'],['En ciclo',$('cycle').value],['Espera preparación',$('waitPrep').value],['Espera espacio revisión',$('waitReview').value]);let csv='\ufeff'+lines.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\r\n');let blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Memoria_Viva_Caso_10.csv';a.click();URL.revokeObjectURL(url)}
+function resetAll(){location.reload()}
+document.querySelectorAll('.tabs button').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x===btn));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('active',x.id===btn.dataset.panel))}));
+['demand','minutes','bcount','budget','method'].forEach(id=>$(id).addEventListener('input',render));
+['cycle','waitPrep','waitReview','margin'].forEach(id=>$(id).addEventListener('input',sample));
+['mass','gravity','far','near'].forEach(id=>$(id).addEventListener('input',ergo));
+render();mix();tests();sample();ergo();
+</script></body></html>
